@@ -15,13 +15,25 @@ type AuthResponse {
   user: User!
 }
 
+type BlogPost {
+  id: Int!
+  title: String!
+  content: String!
+  authorId: Int!
+  createdAt: String
+  updatedAt: String
+}
+
 type Query {
   me: User!
+  allPosts: [BlogPost!]!
+  myPosts: [BlogPost!]!
 }
 
 type Mutation {
   register(input: RegisterInput!): AuthResponse!
   login(input: LoginInput!): AuthResponse!
+  createPost(input: CreatePostInput!): BlogPost!
 }
 
 input RegisterInput {
@@ -33,4 +45,9 @@ input RegisterInput {
 input LoginInput {
   username: String!
   password: String!
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
 }

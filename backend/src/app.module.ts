@@ -4,7 +4,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { Request } from 'express';
 import { AuthModule } from './auth/auth.module';
-import { DatabaseService } from './database/database.service';
+import { BlogModule } from './blog/blog.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -13,11 +14,16 @@ import { DatabaseService } from './database/database.service';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true,
       introspection: true,
-      context: ({ req }: { req: Request }) => ({ req }),
+      context: ({ req, res }: { req: Request; res: any }) => ({
+        req,
+        res,
+      }),
     }),
+    DatabaseModule,
     AuthModule,
+    BlogModule,
   ],
   controllers: [],
-  providers: [DatabaseService],
+  providers: [],
 })
 export class AppModule {}

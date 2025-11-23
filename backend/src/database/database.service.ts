@@ -4,7 +4,7 @@ import {
   createDrizzleConnection,
   getDatabaseConfig,
 } from 'src/config/database.config';
-import { users } from './schema';
+import { users, blogPosts } from './schema';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
@@ -23,6 +23,10 @@ export class DatabaseService implements OnModuleInit {
 
   getUsersTable() {
     return users;
+  }
+
+  getBlogPostsTable() {
+    return blogPosts;
   }
 
   getDbType(): 'sqlite' {

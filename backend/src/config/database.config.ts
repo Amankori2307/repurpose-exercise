@@ -12,8 +12,7 @@ export interface DatabaseConfig {
 export const getDatabaseConfig = (): DatabaseConfig => {
   return {
     type: 'sqlite',
-    database:
-      process.env.DB_DATABASE || join(__dirname, '..', '..', 'database.sqlite'),
+    database: process.env.DB_DATABASE || './database.sqlite',
   };
 };
 
