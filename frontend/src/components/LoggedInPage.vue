@@ -23,6 +23,9 @@
       </div>
 
       <div class="actions">
+        <router-link to="/add-post" class="action-button primary">
+          ✍️ Create New Post
+        </router-link>
         <router-link to="/my-posts" class="action-button">
           📝 View My Posts
         </router-link>
@@ -153,6 +156,14 @@ const handleLogout = () => {
 
 .action-button.secondary {
   background-color: #2196F3;
+}
+
+.action-button.primary {
+  background-color: #FF9800;
+}
+
+.action-button.primary:hover {
+  background-color: #F57C00;
 }
 
 .action-button.secondary:hover {

@@ -6,6 +6,9 @@
         <router-link to="/dashboard" class="back-button">
           ← Back to Dashboard
         </router-link>
+        <router-link to="/add-post" class="add-post-button">
+          ✍️ New Post
+        </router-link>
         <router-link to="/my-posts" class="my-posts-button">
           📝 My Posts
         </router-link>
@@ -118,6 +121,20 @@ const handleLogout = () => {
 
 .back-button:hover {
   background-color: #1976D2;
+}
+
+.add-post-button {
+  background-color: #FF9800;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.add-post-button:hover {
+  background-color: #F57C00;
 }
 
 .my-posts-button {
