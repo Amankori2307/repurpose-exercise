@@ -16,6 +16,14 @@ export class BlogService {
   async createPost(createPostDto: CreatePostDto, authorId: number) {
     const db = this.databaseService.getDb();
 
+    // Database-level validation
+    if (createPostDto.title.length > 200) {
+      throw new Error('Title must not exceed 200 characters');
+    }
+    if (createPostDto.content.length > 5000) {
+      throw new Error('Content must not exceed 5000 characters');
+    }
+
     const [newPost] = await db
       .insert(blogPosts)
       .values({

@@ -37,4 +37,8 @@ export const blogPosts = sqliteTable('blog_posts', {
     .references(() => users.id),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+  // CHECK constraints for length limits:
+  // - title: length <= 200
+  // - content: length <= 5000
+  // These will be added via migration
 });
