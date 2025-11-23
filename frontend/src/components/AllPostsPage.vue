@@ -70,6 +70,7 @@ const ALL_POSTS_QUERY = gql`
       title
       content
       authorId
+      authorUsername
       createdAt
       updatedAt
     }

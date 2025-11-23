@@ -10,12 +10,15 @@
         </div>
       </div>
       
-      <div class="text-gray-600 leading-relaxed whitespace-pre-wrap mb-4">
+      <div class="text-gray-600 leading-relaxed mb-4 line-clamp-2">
         {{ post.content }}
       </div>
 
       <div class="pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
-        <span>Author ID: {{ post.authorId }}</span>
+        <span>
+          <span v-if="post.authorUsername">@{{ post.authorUsername }}</span>
+          <span v-else>User #{{ post.authorId }}</span>
+        </span>
         <span v-if="post.updatedAt && post.updatedAt !== post.createdAt">
           Updated: {{ formatDate(post.updatedAt) }}
         </span>
@@ -30,6 +33,7 @@ interface Post {
   title: string
   content: string
   authorId: number
+  authorUsername?: string | null
   createdAt?: string | null
   updatedAt?: string | null
 }

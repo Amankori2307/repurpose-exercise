@@ -15,6 +15,9 @@ export class BlogPost {
   authorId: number;
 
   @Field(() => String, { nullable: true })
+  authorUsername: string | null;
+
+  @Field(() => String, { nullable: true })
   createdAt: string | null;
 
   @Field(() => String, { nullable: true })

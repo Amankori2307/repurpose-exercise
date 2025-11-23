@@ -20,6 +20,7 @@ type BlogPost {
   title: String!
   content: String!
   authorId: Int!
+  authorUsername: String
   createdAt: String
   updatedAt: String
 }

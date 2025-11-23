@@ -10,6 +10,7 @@ const NEW_POST_SUBSCRIPTION = gql`
       title
       content
       authorId
+      authorUsername
       createdAt
       updatedAt
     }
