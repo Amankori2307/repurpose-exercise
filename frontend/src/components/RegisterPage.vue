@@ -66,9 +66,9 @@
 
         <div class="auth-switch">
           Already have an account? 
-          <button type="button" @click="$emit('switch-to-login')" class="switch-button">
+          <router-link to="/login" class="switch-button">
             Login here
-          </button>
+          </router-link>
         </div>
       </form>
     </div>
@@ -101,8 +101,6 @@ const error = ref('')
 const success = ref('')
 
 const { mutate: registerUser, loading } = useMutation(REGISTER_MUTATION)
-
-defineEmits(['switch-to-login'])
 
 const handleRegister = async () => {
   error.value = ''
