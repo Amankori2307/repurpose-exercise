@@ -1,7 +1,8 @@
 import { ref, computed } from 'vue'
 
 const token = ref<string | null>(localStorage.getItem('access_token'))
-const user = ref<any>(null)
+const storedUser = localStorage.getItem('user')
+const user = ref<any>(storedUser ? JSON.parse(storedUser) : null)
 
 export function useAuth() {
   const isLoggedIn = computed(() => !!token.value)
@@ -10,12 +11,14 @@ export function useAuth() {
     token.value = accessToken
     user.value = userData
     localStorage.setItem('access_token', accessToken)
+    localStorage.setItem('user', JSON.stringify(userData))
   }
 
   const logout = () => {
     token.value = null
     user.value = null
     localStorage.removeItem('access_token')
+    localStorage.removeItem('user')
   }
 
   const getToken = () => token.value
