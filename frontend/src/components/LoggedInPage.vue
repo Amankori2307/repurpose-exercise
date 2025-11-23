@@ -26,6 +26,9 @@
         <router-link to="/my-posts" class="action-button">
           📝 View My Posts
         </router-link>
+        <router-link to="/all-posts" class="action-button secondary">
+          🌐 View All Posts
+        </router-link>
       </div>
     </div>
   </div>
@@ -127,6 +130,10 @@ const handleLogout = () => {
 .actions {
   margin-top: 2rem;
   text-align: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .action-button {
@@ -142,5 +149,13 @@ const handleLogout = () => {
 
 .action-button:hover {
   background-color: #45a049;
+}
+
+.action-button.secondary {
+  background-color: #2196F3;
+}
+
+.action-button.secondary:hover {
+  background-color: #1976D2;
 }
 </style>

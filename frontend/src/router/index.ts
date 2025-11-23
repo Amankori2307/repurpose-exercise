@@ -3,6 +3,7 @@ import LoginPage from '../components/LoginPage.vue'
 import RegisterPage from '../components/RegisterPage.vue'
 import LoggedInPage from '../components/LoggedInPage.vue'
 import MyPostsPage from '../components/MyPostsPage.vue'
+import AllPostsPage from '../components/AllPostsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
       path: '/my-posts',
       name: 'my-posts',
       component: MyPostsPage
+    },
+    {
+      path: '/all-posts',
+      name: 'all-posts',
+      component: AllPostsPage
     }
   ]
 })

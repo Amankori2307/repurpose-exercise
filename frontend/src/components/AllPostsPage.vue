@@ -1,10 +1,13 @@
 <template>
   <div class="posts-container">
     <div class="posts-header">
-      <h1>My Posts</h1>
+      <h1>All Posts</h1>
       <div class="header-actions">
         <router-link to="/dashboard" class="back-button">
           ← Back to Dashboard
+        </router-link>
+        <router-link to="/my-posts" class="my-posts-button">
+          📝 My Posts
         </router-link>
         <button @click="handleLogout" class="logout-button">
           Logout
@@ -14,7 +17,7 @@
 
     <div class="posts-content">
       <div v-if="loading" class="loading">
-        Loading your posts...
+        Loading all posts...
       </div>
 
       <div v-else-if="error" class="error-message">
@@ -25,8 +28,8 @@
       </div>
 
       <div v-else-if="!posts || posts.length === 0" class="no-posts">
-        <p>📝 You haven't created any posts yet.</p>
-        <p>Start writing to see your posts here!</p>
+        <p>📝 No posts available yet.</p>
+        <p>Be the first to create a post!</p>
       </div>
 
       <div v-else class="posts-list">
@@ -48,9 +51,9 @@ import { useAuth } from '../composables/useAuth'
 import { useRouter } from 'vue-router'
 import PostCard from './PostCard.vue'
 
-const MY_POSTS_QUERY = gql`
-  query MyPosts {
-    myPosts {
+const ALL_POSTS_QUERY = gql`
+  query AllPosts {
+    allPosts {
       id
       title
       content
@@ -64,9 +67,9 @@ const MY_POSTS_QUERY = gql`
 const { logout } = useAuth()
 const router = useRouter()
 
-const { result, loading, error, refetch } = useQuery(MY_POSTS_QUERY)
+const { result, loading, error, refetch } = useQuery(ALL_POSTS_QUERY)
 
-const posts = computed(() => result.value?.myPosts || [])
+const posts = computed(() => result.value?.allPosts || [])
 
 const handleLogout = () => {
   logout()
@@ -115,6 +118,20 @@ const handleLogout = () => {
 
 .back-button:hover {
   background-color: #1976D2;
+}
+
+.my-posts-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.my-posts-button:hover {
+  background-color: #45a049;
 }
 
 .logout-button {
