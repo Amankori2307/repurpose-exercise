@@ -1,37 +1,50 @@
 <template>
-  <div class="logged-in-container">
-    <div class="logged-in-card">
-      <div class="header">
-        <h1>Welcome!</h1>
-        <button @click="handleLogout" class="logout-button">
-          Logout
-        </button>
-      </div>
-      
-      <div class="user-info">
-        <h2>You are logged in</h2>
-        <div v-if="user" class="user-details">
-          <p><strong>Username:</strong> {{ user.username }}</p>
-          <p><strong>Email:</strong> {{ user.email }}</p>
-          <p><strong>User ID:</strong> {{ user.id }}</p>
+  <div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div class="max-w-2xl w-full">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+        <div class="mb-8">
+          <h1 class="text-3xl font-light text-gray-900 mb-2">Welcome</h1>
+          <p class="text-sm text-gray-500">You are logged in</p>
         </div>
-      </div>
+        
+        <div v-if="user" class="mb-8 p-4 bg-gray-50 rounded border border-gray-200">
+          <div class="space-y-2 text-sm">
+            <p class="text-gray-700">
+              <span class="text-gray-500">Username:</span> {{ user.username }}
+            </p>
+            <p class="text-gray-700">
+              <span class="text-gray-500">Email:</span> {{ user.email }}
+            </p>
+            <p class="text-gray-700">
+              <span class="text-gray-500">User ID:</span> {{ user.id }}
+            </p>
+          </div>
+        </div>
 
-      <div class="success-message">
-        <p>✅ Authentication successful!</p>
-        <p>Your token has been saved and you are now logged in.</p>
-      </div>
+        <div class="mb-8 p-4 bg-green-50 border border-green-200 rounded">
+          <p class="text-sm text-green-700">Authentication successful. Your token has been saved.</p>
+        </div>
 
-      <div class="actions">
-        <router-link to="/add-post" class="action-button primary">
-          ✍️ Create New Post
-        </router-link>
-        <router-link to="/my-posts" class="action-button">
-          📝 View My Posts
-        </router-link>
-        <router-link to="/all-posts" class="action-button secondary">
-          🌐 View All Posts
-        </router-link>
+        <div class="space-y-3">
+          <router-link 
+            to="/add-post" 
+            class="block w-full px-4 py-3 bg-gray-900 text-white text-center rounded-md hover:bg-gray-800 transition-colors text-sm font-medium"
+          >
+            Create New Post
+          </router-link>
+          <router-link 
+            to="/my-posts" 
+            class="block w-full px-4 py-3 bg-white text-gray-700 text-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
+          >
+            View My Posts
+          </router-link>
+          <router-link 
+            to="/all-posts" 
+            class="block w-full px-4 py-3 bg-white text-gray-700 text-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
+          >
+            View All Posts
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -39,134 +52,6 @@
 
 <script setup lang="ts">
 import { useAuth } from '../composables/useAuth'
-import { useRouter } from 'vue-router'
 
-const { user, logout } = useAuth()
-const router = useRouter()
-
-const handleLogout = () => {
-  logout()
-  router.push('/login')
-}
+const { user } = useAuth()
 </script>
-
-<style scoped>
-.logged-in-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f5f5f5;
-  padding: 20px;
-}
-
-.logged-in-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
-  text-align: center;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.header h1 {
-  color: #333;
-  margin: 0;
-}
-
-.logout-button {
-  background-color: #f44336;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-.logout-button:hover {
-  background-color: #d32f2f;
-}
-
-.user-info {
-  margin-bottom: 2rem;
-}
-
-.user-info h2 {
-  color: #4CAF50;
-  margin-bottom: 1rem;
-}
-
-.user-details {
-  text-align: left;
-  background-color: #f9f9f9;
-  padding: 1rem;
-  border-radius: 5px;
-  border-left: 4px solid #4CAF50;
-}
-
-.user-details p {
-  margin: 0.5rem 0;
-  color: #555;
-}
-
-.success-message {
-  background-color: #e8f5e8;
-  padding: 1rem;
-  border-radius: 5px;
-  color: #2e7d32;
-}
-
-.success-message p {
-  margin: 0.5rem 0;
-}
-
-.actions {
-  margin-top: 2rem;
-  text-align: center;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.action-button {
-  display: inline-block;
-  background-color: #4CAF50;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.3s;
-}
-
-.action-button:hover {
-  background-color: #45a049;
-}
-
-.action-button.secondary {
-  background-color: #2196F3;
-}
-
-.action-button.primary {
-  background-color: #FF9800;
-}
-
-.action-button.primary:hover {
-  background-color: #F57C00;
-}
-
-.action-button.secondary:hover {
-  background-color: #1976D2;
-}
-</style>

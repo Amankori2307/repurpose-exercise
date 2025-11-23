@@ -1,18 +1,32 @@
 <template>
-  <div v-if="visible" class="notification-toast" :class="{ show: showToast }">
-    <div class="notification-content">
-      <div class="notification-icon">📝</div>
-      <div class="notification-text">
-        <div class="notification-title">New Post Added!</div>
-        <div class="notification-message">{{ message }}</div>
-      </div>
-      <div class="notification-actions">
-        <button @click="viewAllPosts" class="view-button">
-          View All Posts
-        </button>
-        <button @click="dismiss" class="dismiss-button">
-          ×
-        </button>
+  <div v-if="visible" 
+       class="bg-white rounded-lg shadow-md border border-gray-200 max-w-sm w-full pointer-events-auto transform transition-all duration-300 ease-out"
+       :class="{ 'translate-x-full opacity-0': !showToast, 'translate-x-0 opacity-100': showToast }">
+    <div class="p-4">
+      <div class="flex items-start">
+        <div class="ml-3 w-0 flex-1">
+          <p class="text-sm font-medium text-gray-900">New Post Added</p>
+          <p class="mt-1 text-xs text-gray-500">{{ message }}</p>
+          <div class="mt-3">
+            <button 
+              @click="viewAllPosts"
+              class="text-xs text-gray-700 hover:text-gray-900 underline"
+            >
+              View All Posts
+            </button>
+          </div>
+        </div>
+        <div class="ml-4 flex-shrink-0">
+          <button 
+            @click="dismiss"
+            class="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+          >
+            <span class="sr-only">Close</span>
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -67,107 +81,3 @@ const dismiss = () => {
 }
 </script>
 
-<style scoped>
-.notification-toast {
-  position: relative;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  border-left: 4px solid #4CAF50;
-  width: 100%;
-  transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
-}
-
-.notification-toast.show {
-  transform: translateX(0);
-}
-
-.notification-content {
-  display: flex;
-  align-items: flex-start;
-  padding: 1rem;
-  gap: 0.75rem;
-}
-
-.notification-icon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.notification-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.notification-title {
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
-}
-
-.notification-message {
-  color: #666;
-  font-size: 0.8rem;
-  line-height: 1.4;
-  word-wrap: break-word;
-}
-
-.notification-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.view-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  white-space: nowrap;
-}
-
-.view-button:hover {
-  background-color: #45a049;
-}
-
-.dismiss-button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: #999;
-  padding: 0;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.3s;
-}
-
-.dismiss-button:hover {
-  color: #666;
-}
-
-@media (max-width: 768px) {
-  .notification-toast {
-    transform: translateY(-100%);
-  }
-
-  .notification-toast.show {
-    transform: translateY(0);
-  }
-
-  .notification-actions {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-</style>

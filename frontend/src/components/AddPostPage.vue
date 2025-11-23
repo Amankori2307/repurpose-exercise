@@ -1,84 +1,93 @@
 <template>
-  <div class="add-post-container">
-    <div class="add-post-header">
-      <h1>Create New Post</h1>
-      <div class="header-actions">
-        <router-link to="/dashboard" class="back-button">
-          ← Back to Dashboard
-        </router-link>
-        <router-link to="/my-posts" class="my-posts-button">
-          📝 My Posts
-        </router-link>
-        <button @click="handleLogout" class="logout-button">
-          Logout
-        </button>
-      </div>
-    </div>
-
-    <div class="add-post-content">
-      <div class="form-card">
-        <form @submit.prevent="handleCreatePost" class="post-form">
-          <div class="form-group">
-            <label for="title">Post Title:</label>
-            <input
-              id="title"
-              v-model="title"
-              type="text"
-              placeholder="Enter your post title"
-              required
-              :disabled="loading"
-              class="form-input"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="content">Post Content:</label>
-            <textarea
-              id="content"
-              v-model="content"
-              placeholder="Write your post content here..."
-              required
-              :disabled="loading"
-              class="form-textarea"
-              rows="8"
-            ></textarea>
-          </div>
-
-          <div v-if="error" class="error-message">
-            {{ error }}
-          </div>
-
-          <div v-if="success" class="success-message">
-            {{ success }}
-          </div>
-
-          <div class="form-actions">
-            <button 
-              type="submit" 
-              :disabled="loading || !title.trim() || !content.trim()" 
-              class="submit-button"
-            >
-              <span v-if="loading">Creating Post...</span>
-              <span v-else>✍️ Create Post</span>
-            </button>
-            
-            <button 
-              type="button" 
-              @click="clearForm" 
-              :disabled="loading"
-              class="clear-button"
-            >
-              🗑️ Clear
-            </button>
-          </div>
-        </form>
+  <div class="min-h-screen bg-gray-50 py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-8">
+        <h1 class="text-3xl font-light text-gray-900 mb-6">Create New Post</h1>
+        <div class="flex flex-wrap gap-3">
+          <router-link 
+            to="/dashboard" 
+            class="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            ← Dashboard
+          </router-link>
+          <span class="text-gray-300">|</span>
+          <router-link 
+            to="/my-posts" 
+            class="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            My Posts
+          </router-link>
+        </div>
       </div>
 
-      <div class="preview-card" v-if="title.trim() || content.trim()">
-        <h3>Preview:</h3>
-        <div class="post-preview">
-          <h4 class="preview-title">{{ title || 'Untitled Post' }}</h4>
-          <div class="preview-content">{{ content || 'No content yet...' }}</div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <form @submit.prevent="handleCreatePost" class="space-y-6">
+            <div>
+              <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                Title
+              </label>
+              <input
+                id="title"
+                v-model="title"
+                type="text"
+                placeholder="Enter post title"
+                required
+                :disabled="loading"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 disabled:bg-gray-50 text-gray-900"
+              />
+            </div>
+
+            <div>
+              <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                Content
+              </label>
+              <textarea
+                id="content"
+                v-model="content"
+                placeholder="Write your post content..."
+                required
+                :disabled="loading"
+                rows="12"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 disabled:bg-gray-50 text-gray-900 resize-none"
+              ></textarea>
+            </div>
+
+            <div v-if="error" class="p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+              {{ error }}
+            </div>
+
+            <div v-if="success" class="p-3 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+              {{ success }}
+            </div>
+
+            <div class="flex gap-3">
+              <button 
+                type="submit" 
+                :disabled="loading || !title.trim() || !content.trim()" 
+                class="flex-1 px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              >
+                {{ loading ? 'Creating...' : 'Create Post' }}
+              </button>
+              
+              <button 
+                type="button" 
+                @click="clearForm" 
+                :disabled="loading"
+                class="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50 text-sm font-medium"
+              >
+                Clear
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div v-if="title.trim() || content.trim()" class="bg-white rounded-lg shadow-sm p-6">
+          <h3 class="text-sm font-medium text-gray-700 mb-4 pb-2 border-b border-gray-200">Preview</h3>
+          <div class="space-y-4">
+            <h4 class="text-xl font-light text-gray-900">{{ title || 'Untitled Post' }}</h4>
+            <div class="text-gray-600 whitespace-pre-wrap leading-relaxed">{{ content || 'No content yet...' }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -89,7 +98,6 @@
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import { gql } from '@apollo/client/core'
-import { useAuth } from '../composables/useAuth'
 import { useRouter } from 'vue-router'
 
 const CREATE_POST_MUTATION = gql`
@@ -105,7 +113,6 @@ const CREATE_POST_MUTATION = gql`
   }
 `
 
-const { logout } = useAuth()
 const router = useRouter()
 
 const title = ref('')
@@ -114,11 +121,6 @@ const error = ref('')
 const success = ref('')
 
 const { mutate: createPost, loading } = useMutation(CREATE_POST_MUTATION)
-
-const handleLogout = () => {
-  logout()
-  router.push('/login')
-}
 
 const clearForm = () => {
   title.value = ''
@@ -167,240 +169,3 @@ const handleCreatePost = async () => {
   }
 }
 </script>
-
-<style scoped>
-.add-post-container {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  padding: 20px;
-}
-
-.add-post-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.add-post-header h1 {
-  color: #333;
-  margin: 0;
-}
-
-.header-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.back-button {
-  background-color: #2196F3;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-.back-button:hover {
-  background-color: #1976D2;
-}
-
-.my-posts-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-.my-posts-button:hover {
-  background-color: #45a049;
-}
-
-.logout-button {
-  background-color: #f44336;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-.logout-button:hover {
-  background-color: #d32f2f;
-}
-
-.add-post-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-
-.form-card, .preview-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.post-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.form-input, .form-textarea {
-  padding: 0.75rem;
-  border: 2px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-  font-family: inherit;
-}
-
-.form-input:focus, .form-textarea:focus {
-  outline: none;
-  border-color: #4CAF50;
-}
-
-.form-input:disabled, .form-textarea:disabled {
-  background-color: #f9f9f9;
-  cursor: not-allowed;
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.error-message {
-  color: #f44336;
-  font-size: 0.9rem;
-  padding: 1rem;
-  background-color: #ffebee;
-  border-radius: 5px;
-  border-left: 4px solid #f44336;
-}
-
-.success-message {
-  color: #4CAF50;
-  font-size: 0.9rem;
-  padding: 1rem;
-  background-color: #e8f5e8;
-  border-radius: 5px;
-  border-left: 4px solid #4CAF50;
-}
-
-.form-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.submit-button, .clear-button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.submit-button {
-  background-color: #4CAF50;
-  color: white;
-  flex: 1;
-}
-
-.submit-button:hover:not(:disabled) {
-  background-color: #45a049;
-}
-
-.submit-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.clear-button {
-  background-color: #f5f5f5;
-  color: #666;
-  border: 2px solid #ddd;
-}
-
-.clear-button:hover:not(:disabled) {
-  background-color: #eeeeee;
-}
-
-.preview-card h3 {
-  margin-top: 0;
-  color: #333;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 0.5rem;
-}
-
-.post-preview {
-  margin-top: 1rem;
-}
-
-.preview-title {
-  color: #333;
-  margin: 0 0 1rem 0;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.preview-content {
-  color: #555;
-  line-height: 1.6;
-  white-space: pre-wrap;
-}
-
-@media (max-width: 768px) {
-  .add-post-header {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .header-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .add-post-content {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .add-post-container {
-    padding: 10px;
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
-}
-</style>
