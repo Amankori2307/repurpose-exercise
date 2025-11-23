@@ -1,22 +1,35 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import LoginPage from './components/LoginPage.vue'
+import RegisterPage from './components/RegisterPage.vue'
+
+const currentView = ref<'login' | 'register'>('login')
+
+const switchToLogin = () => {
+  currentView.value = 'login'
+}
+
+const switchToRegister = () => {
+  currentView.value = 'register'
+}
 </script>
 
 <template>
-  <LoginPage />
+  <div class="app">
+    <LoginPage 
+      v-if="currentView === 'login'" 
+      @switch-to-register="switchToRegister"
+    />
+    <RegisterPage 
+      v-else-if="currentView === 'register'" 
+      @switch-to-login="switchToLogin"
+    />
+  </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.app {
+  width: 100%;
+  height: 100vh;
 }
 </style>

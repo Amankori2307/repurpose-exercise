@@ -1,8 +1,8 @@
 <template>
-  <div class="login-container">
-    <div class="login-card">
-      <h2>Login</h2>
-      <form @submit.prevent="handleLogin" class="login-form">
+  <div class="register-container">
+    <div class="register-card">
+      <h2>Register</h2>
+      <form @submit.prevent="handleRegister" class="register-form">
         <div class="form-group">
           <label for="username">Username:</label>
           <input
@@ -10,6 +10,18 @@
             v-model="username"
             type="text"
             placeholder="Enter your username"
+            required
+            :disabled="loading"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            id="email"
+            v-model="email"
+            type="email"
+            placeholder="Enter your email"
             required
             :disabled="loading"
           />
@@ -27,19 +39,35 @@
           />
         </div>
 
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password:</label>
+          <input
+            id="confirmPassword"
+            v-model="confirmPassword"
+            type="password"
+            placeholder="Confirm your password"
+            required
+            :disabled="loading"
+          />
+        </div>
+
         <div v-if="error" class="error-message">
           {{ error }}
         </div>
 
-        <button type="submit" :disabled="loading" class="login-button">
-          <span v-if="loading">Logging in...</span>
-          <span v-else>Login</span>
+        <div v-if="success" class="success-message">
+          {{ success }}
+        </div>
+
+        <button type="submit" :disabled="loading" class="register-button">
+          <span v-if="loading">Registering...</span>
+          <span v-else>Register</span>
         </button>
 
         <div class="auth-switch">
-          Don't have an account? 
-          <button type="button" @click="$emit('switch-to-register')" class="switch-button">
-            Register here
+          Already have an account? 
+          <button type="button" @click="$emit('switch-to-login')" class="switch-button">
+            Login here
           </button>
         </div>
       </form>
@@ -52,9 +80,9 @@ import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import { gql } from '@apollo/client/core'
 
-const LOGIN_MUTATION = gql`
-  mutation Login($input: LoginInput!) {
-    login(input: $input) {
+const REGISTER_MUTATION = gql`
+  mutation Register($input: RegisterInput!) {
+    register(input: $input) {
       access_token
       user {
         id
@@ -66,60 +94,80 @@ const LOGIN_MUTATION = gql`
 `
 
 const username = ref('')
+const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const error = ref('')
+const success = ref('')
 
-const { mutate: loginUser, loading } = useMutation(LOGIN_MUTATION)
+const { mutate: registerUser, loading } = useMutation(REGISTER_MUTATION)
 
-defineEmits(['switch-to-register'])
+defineEmits(['switch-to-login'])
 
-const handleLogin = async () => {
+const handleRegister = async () => {
   error.value = ''
+  success.value = ''
   
-  if (!username.value || !password.value) {
+  if (!username.value || !email.value || !password.value || !confirmPassword.value) {
     error.value = 'Please fill in all fields'
     return
   }
 
+  if (password.value !== confirmPassword.value) {
+    error.value = 'Passwords do not match'
+    return
+  }
+
+  if (password.value.length < 6) {
+    error.value = 'Password must be at least 6 characters long'
+    return
+  }
+
   try {
-    const result = await loginUser({
+    const result = await registerUser({
       input: {
         username: username.value,
+        email: email.value,
         password: password.value
       }
     })
 
-    if (result?.data?.login) {
-      const { access_token, user } = result.data.login
+    if (result?.data?.register) {
+      const { access_token, user } = result.data.register
       
-      // Store the token (you might want to use a more secure method)
+      // Store the token
       localStorage.setItem('access_token', access_token)
       
       // Clear form
       username.value = ''
+      email.value = ''
       password.value = ''
+      confirmPassword.value = ''
       
-      console.log('Login successful!', user)
+      success.value = `Registration successful! Welcome, ${user.username}!`
+      
+      console.log('Registration successful!', user)
       
       // You can emit an event or use a router to navigate
-      // For now, we'll just log success
-      alert('Login successful!')
+      setTimeout(() => {
+        alert('Registration successful! You are now logged in.')
+      }, 1000)
     }
   } catch (err: any) {
-    console.error('Login error:', err)
+    console.error('Registration error:', err)
     if (err.graphQLErrors?.length > 0) {
       error.value = err.graphQLErrors[0].message
     } else if (err.networkError) {
       error.value = 'Network error. Please check your connection.'
     } else {
-      error.value = 'Login failed. Please try again.'
+      error.value = 'Registration failed. Please try again.'
     }
   }
 }
 </script>
 
 <style scoped>
-.login-container {
+.register-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -128,7 +176,7 @@ const handleLogin = async () => {
   padding: 20px;
 }
 
-.login-card {
+.register-card {
   background: white;
   padding: 2rem;
   border-radius: 10px;
@@ -137,13 +185,13 @@ const handleLogin = async () => {
   max-width: 400px;
 }
 
-.login-card h2 {
+.register-card h2 {
   text-align: center;
   margin-bottom: 1.5rem;
   color: #333;
 }
 
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -187,7 +235,16 @@ const handleLogin = async () => {
   border-radius: 5px;
 }
 
-.login-button {
+.success-message {
+  color: #4CAF50;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0.5rem;
+  background-color: #e8f5e8;
+  border-radius: 5px;
+}
+
+.register-button {
   background-color: #4CAF50;
   color: white;
   padding: 0.75rem 1.5rem;
@@ -199,11 +256,11 @@ const handleLogin = async () => {
   margin-top: 0.5rem;
 }
 
-.login-button:hover:not(:disabled) {
+.register-button:hover:not(:disabled) {
   background-color: #45a049;
 }
 
-.login-button:disabled {
+.register-button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
