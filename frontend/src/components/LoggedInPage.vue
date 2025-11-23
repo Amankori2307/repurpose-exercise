@@ -21,6 +21,12 @@
         <p>✅ Authentication successful!</p>
         <p>Your token has been saved and you are now logged in.</p>
       </div>
+
+      <div class="actions">
+        <router-link to="/my-posts" class="action-button">
+          📝 View My Posts
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -116,5 +122,25 @@ const handleLogout = () => {
 
 .success-message p {
   margin: 0.5rem 0;
+}
+
+.actions {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.action-button {
+  display: inline-block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: #45a049;
 }
 </style>
