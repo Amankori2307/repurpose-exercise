@@ -58,9 +58,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
 import { gql } from '@apollo/client/core'
+import { useQuery } from '@vue/apollo-composable'
+import { computed, onActivated } from 'vue'
 import PostCard from './PostCard.vue'
 
 const MY_POSTS_QUERY = gql`
@@ -77,7 +77,14 @@ const MY_POSTS_QUERY = gql`
   }
 `
 
-const { result, loading, error, refetch } = useQuery(MY_POSTS_QUERY)
+const { result, loading, error, refetch } = useQuery(MY_POSTS_QUERY, null, {
+  fetchPolicy: 'cache-and-network',
+})
 
 const posts = computed(() => result.value?.myPosts || [])
+
+// Refetch when navigating to this page
+onActivated(() => {
+  refetch()
+})
 </script>

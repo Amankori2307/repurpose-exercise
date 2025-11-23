@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { gql } from '@apollo/client/core'
 import { useQuery } from '@vue/apollo-composable'
-import { computed } from 'vue'
+import { computed, onActivated } from 'vue'
 import PostCard from './PostCard.vue'
 
 const ALL_POSTS_QUERY = gql`
@@ -89,7 +89,14 @@ const ALL_POSTS_QUERY = gql`
   }
 `
 
-const { result, loading, error, refetch } = useQuery(ALL_POSTS_QUERY)
+const { result, loading, error, refetch } = useQuery(ALL_POSTS_QUERY, null, {
+  fetchPolicy: 'cache-and-network',
+})
 
 const posts = computed(() => result.value?.allPosts || [])
+
+// Refetch when navigating to this page
+onActivated(() => {
+  refetch()
+})
 </script>
