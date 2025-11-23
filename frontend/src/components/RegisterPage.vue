@@ -79,6 +79,8 @@
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import { gql } from '@apollo/client/core'
+import { useAuth } from '../composables/useAuth'
+import { useRouter } from 'vue-router'
 
 const REGISTER_MUTATION = gql`
   mutation Register($input: RegisterInput!) {
@@ -101,6 +103,8 @@ const error = ref('')
 const success = ref('')
 
 const { mutate: registerUser, loading } = useMutation(REGISTER_MUTATION)
+const { login } = useAuth()
+const router = useRouter()
 
 const handleRegister = async () => {
   error.value = ''
@@ -133,8 +137,8 @@ const handleRegister = async () => {
     if (result?.data?.register) {
       const { access_token, user } = result.data.register
       
-      // Store the token
-      localStorage.setItem('access_token', access_token)
+      // Use auth composable to handle login
+      login(access_token, user)
       
       // Clear form
       username.value = ''
@@ -142,14 +146,8 @@ const handleRegister = async () => {
       password.value = ''
       confirmPassword.value = ''
       
-      success.value = `Registration successful! Welcome, ${user.username}!`
-      
-      console.log('Registration successful!', user)
-      
-      // You can emit an event or use a router to navigate
-      setTimeout(() => {
-        alert('Registration successful! You are now logged in.')
-      }, 1000)
+      // Navigate to dashboard
+      router.push('/dashboard')
     }
   } catch (err: any) {
     console.error('Registration error:', err)

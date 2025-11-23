@@ -51,6 +51,8 @@
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import { gql } from '@apollo/client/core'
+import { useAuth } from '../composables/useAuth'
+import { useRouter } from 'vue-router'
 
 const LOGIN_MUTATION = gql`
   mutation Login($input: LoginInput!) {
@@ -70,6 +72,8 @@ const password = ref('')
 const error = ref('')
 
 const { mutate: loginUser, loading } = useMutation(LOGIN_MUTATION)
+const { login } = useAuth()
+const router = useRouter()
 
 const handleLogin = async () => {
   error.value = ''
@@ -90,18 +94,15 @@ const handleLogin = async () => {
     if (result?.data?.login) {
       const { access_token, user } = result.data.login
       
-      // Store the token (you might want to use a more secure method)
-      localStorage.setItem('access_token', access_token)
+      // Use auth composable to handle login
+      login(access_token, user)
       
       // Clear form
       username.value = ''
       password.value = ''
       
-      console.log('Login successful!', user)
-      
-      // You can emit an event or use a router to navigate
-      // For now, we'll just log success
-      alert('Login successful!')
+      // Navigate to dashboard
+      router.push('/dashboard')
     }
   } catch (err: any) {
     console.error('Login error:', err)
