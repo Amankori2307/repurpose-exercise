@@ -4,5 +4,6 @@ import { BlogResolver } from './graphql/blog.resolver';
 
 @Module({
   providers: [BlogService, BlogResolver],
+  exports: [BlogService, BlogResolver],
 })
 export class BlogModule {}

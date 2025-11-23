@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { GraphQLJwtAuthGuard } from '../../auth/guards/graphql-jwt.guard';
 import { RequestWithUser } from '../../auth/interfaces/request-with-user.interface';
 import { BlogService } from '../blog.service';
 import { BlogPost, CreatePostInput } from './blog.types';
@@ -9,7 +9,7 @@ import { BlogPost, CreatePostInput } from './blog.types';
 export class BlogResolver {
   constructor(private blogService: BlogService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(GraphQLJwtAuthGuard)
   @Mutation(() => BlogPost)
   createPost(
     @Args('input') createPostInput: CreatePostInput,
@@ -24,7 +24,7 @@ export class BlogResolver {
     return this.blogService.findAllPosts();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(GraphQLJwtAuthGuard)
   @Query(() => [BlogPost])
   myPosts(@Context() context: { req: RequestWithUser }): Promise<BlogPost[]> {
     const authorId = context.req.user.id;

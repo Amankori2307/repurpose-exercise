@@ -115,7 +115,7 @@ export class AuthService {
     const [user] = await db
       .select()
       .from(usersTable)
-      .where(eq(usersTable.username, payload.username))
+      .where(eq(usersTable.id, parseInt(payload.sub)))
       .limit(1);
 
     return user || null;

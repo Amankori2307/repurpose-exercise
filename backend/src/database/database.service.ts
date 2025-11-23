@@ -3,8 +3,8 @@ import type { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import {
   createDrizzleConnection,
   getDatabaseConfig,
-} from 'src/config/database.config';
-import { users, blogPosts } from './schema';
+} from '../config/database.config';
+import { blogPosts, users } from './schema';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {

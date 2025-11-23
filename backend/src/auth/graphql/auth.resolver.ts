@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { GraphQLJwtAuthGuard } from '../guards/graphql-jwt.guard';
 import { AuthResponse, User, RegisterInput, LoginInput } from './auth.types';
 import { RequestWithUser } from '../interfaces/request-with-user.interface';
 
@@ -21,7 +21,7 @@ export class AuthResolver {
     return this.authService.login(loginInput);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(GraphQLJwtAuthGuard)
   @Query(() => User)
   me(@Context() context: { req: RequestWithUser }): User {
     const user = context.req.user;

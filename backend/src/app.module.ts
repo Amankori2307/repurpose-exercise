@@ -14,10 +14,7 @@ import { DatabaseModule } from './database/database.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true,
       introspection: true,
-      context: ({ req, res }: { req: Request; res: any }) => ({
-        req,
-        res,
-      }),
+      context: ({ req, res }: { req: any; res: any }) => ({ req, res }),
     }),
     DatabaseModule,
     AuthModule,

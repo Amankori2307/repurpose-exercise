@@ -1,18 +1,20 @@
-import { drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
-import { join } from 'path';
-
+import { appConfig } from 'config';
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import path from 'path';
 type DatabaseType = 'sqlite';
-
 export interface DatabaseConfig {
   type: DatabaseType;
   database: string;
 }
 
 export const getDatabaseConfig = (): DatabaseConfig => {
+  const rootDir = appConfig.ROOT_DIR;
+  console.log({ rootDir });
+
   return {
     type: 'sqlite',
-    database: process.env.DB_DATABASE || './database.sqlite',
+    database: path.join(rootDir, '..', 'database', 'database.sqlite'),
   };
 };
 
