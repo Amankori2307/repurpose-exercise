@@ -30,6 +30,7 @@ console.log('[App] Initial login state:', isLoggedIn.value)
         v-for="notification in notifications"
         :key="notification.id"
         :visible="notification.visible"
+        :post-id="notification.postId"
         :author-id="notification.authorId"
         :post-title="notification.postTitle"
         @dismiss="dismissNotification(notification.id)"

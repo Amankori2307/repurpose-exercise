@@ -19,6 +19,7 @@ const NEW_POST_SUBSCRIPTION = gql`
 
 interface NotificationData {
   id: number;
+  postId: number;
   authorId: number;
   postTitle: string;
   visible: boolean;
@@ -88,6 +89,7 @@ export function useNotifications() {
         );
         const notification: NotificationData = {
           id: Date.now(),
+          postId: newPost.id,
           authorId: newPost.authorId,
           postTitle: newPost.title,
           visible: true,

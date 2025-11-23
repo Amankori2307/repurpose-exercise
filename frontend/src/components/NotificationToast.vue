@@ -9,12 +9,20 @@
         <div class="flex-1 min-w-0">
           <p class="text-sm font-medium text-gray-900">New Post</p>
           <p class="mt-1 text-sm text-gray-600 break-words">{{ postTitle }}</p>
-          <button 
-            @click="viewAllPosts"
-            class="mt-3 text-xs text-gray-500 hover:text-gray-900 transition-colors font-medium"
-          >
-            View all posts →
-          </button>
+          <div class="mt-3 flex gap-2">
+            <button 
+              @click="viewPost"
+              class="text-xs text-gray-900 hover:text-gray-700 transition-colors font-medium bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded"
+            >
+              View Post →
+            </button>
+            <button 
+              @click="viewAllPosts"
+              class="text-xs text-gray-500 hover:text-gray-900 transition-colors font-medium"
+            >
+              All Posts
+            </button>
+          </div>
         </div>
         <button 
           @click="dismiss"
@@ -36,6 +44,7 @@ import { useRouter } from 'vue-router'
 
 interface Props {
   visible: boolean
+  postId: number
   authorId: number
   postTitle: string
 }
@@ -51,6 +60,7 @@ const showToast = ref(false)
 onMounted(() => {
   console.log('[NotificationToast] Component mounted with props:', {
     visible: props.visible,
+    postId: props.postId,
     authorId: props.authorId,
     postTitle: props.postTitle,
   })
@@ -78,6 +88,11 @@ watch(() => props.visible, (newVal) => {
 watch(showToast, (newVal) => {
   console.log('[NotificationToast] showToast state changed:', newVal)
 })
+
+const viewPost = () => {
+  router.push(`/post/${props.postId}`)
+  dismiss()
+}
 
 const viewAllPosts = () => {
   router.push('/all-posts')
