@@ -14,6 +14,15 @@
         {{ post.content }}
       </div>
 
+      <div class="mb-4">
+        <router-link 
+          :to="`/post/${post.id}`"
+          class="text-sm text-gray-700 hover:text-gray-900 font-medium transition-colors"
+        >
+          Read more →
+        </router-link>
+      </div>
+
       <div class="pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
         <span>
           <span v-if="post.authorUsername">@{{ post.authorUsername }}</span>

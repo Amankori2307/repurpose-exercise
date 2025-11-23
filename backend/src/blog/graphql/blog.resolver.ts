@@ -2,6 +2,7 @@ import { Inject, UseGuards } from '@nestjs/common';
 import {
   Args,
   Context,
+  Int,
   Mutation,
   Query,
   Resolver,
@@ -43,9 +44,14 @@ export class BlogResolver {
     return this.blogService.findPostsByAuthor(authorId);
   }
 
+  @Query(() => BlogPost, { nullable: true })
+  post(@Args('id', { type: () => Int }) id: number): Promise<BlogPost | null> {
+    return this.blogService.findPostById(id);
+  }
+
   // <-- Add this subscription
   @Subscription(() => BlogPost, {
-    resolve: (payload) => payload.newPost,
+    resolve: (payload: { newPost: BlogPost }) => payload.newPost,
   })
   newPost() {
     return this.pubSub.asyncIterableIterator('NEW_POST');

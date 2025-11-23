@@ -29,6 +29,7 @@ type Query {
   me: User!
   allPosts: [BlogPost!]!
   myPosts: [BlogPost!]!
+  post(id: Int!): BlogPost
 }
 
 type Mutation {

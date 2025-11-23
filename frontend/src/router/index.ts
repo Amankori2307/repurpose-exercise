@@ -4,6 +4,7 @@ import AllPostsPage from "../components/AllPostsPage.vue";
 import LoggedInPage from "../components/LoggedInPage.vue";
 import LoginPage from "../components/LoginPage.vue";
 import MyPostsPage from "../components/MyPostsPage.vue";
+import PostDetailPage from "../components/PostDetailPage.vue";
 import RegisterPage from "../components/RegisterPage.vue";
 import { useAuth } from "../composables/useAuth";
 
@@ -50,6 +51,12 @@ const router = createRouter({
       path: "/add-post",
       name: "add-post",
       component: AddPostPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/post/:id",
+      name: "post-detail",
+      component: PostDetailPage,
       meta: { requiresAuth: true },
     },
   ],

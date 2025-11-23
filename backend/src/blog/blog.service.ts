@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { PubSub } from 'graphql-subscriptions';
 import { PUB_SUB } from 'src/pub-sub/pubsub.provider';
 import { DatabaseService } from '../database/database.service';
@@ -55,7 +55,8 @@ export class BlogService {
       })
       .from(blogPosts)
       .leftJoin(users, eq(blogPosts.authorId, users.id))
-      .where(eq(blogPosts.authorId, authorId));
+      .where(eq(blogPosts.authorId, authorId))
+      .orderBy(desc(blogPosts.createdAt));
 
     return posts.map((post) => ({
       ...post,
@@ -77,11 +78,39 @@ export class BlogService {
         authorUsername: users.username,
       })
       .from(blogPosts)
-      .leftJoin(users, eq(blogPosts.authorId, users.id));
+      .leftJoin(users, eq(blogPosts.authorId, users.id))
+      .orderBy(desc(blogPosts.createdAt));
 
     return posts.map((post) => ({
       ...post,
       authorUsername: post.authorUsername || null,
     }));
+  }
+
+  async findPostById(id: number) {
+    const db = this.databaseService.getDb();
+
+    const [post] = await db
+      .select({
+        id: blogPosts.id,
+        title: blogPosts.title,
+        content: blogPosts.content,
+        authorId: blogPosts.authorId,
+        createdAt: blogPosts.createdAt,
+        updatedAt: blogPosts.updatedAt,
+        authorUsername: users.username,
+      })
+      .from(blogPosts)
+      .leftJoin(users, eq(blogPosts.authorId, users.id))
+      .where(eq(blogPosts.id, id));
+
+    if (!post) {
+      return null;
+    }
+
+    return {
+      ...post,
+      authorUsername: post.authorUsername || null,
+    };
   }
 }
