@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
+import { PubSub } from 'graphql-subscriptions';
+import { PUB_SUB } from 'src/pub-sub/pubsub.provider';
 import { DatabaseService } from '../database/database.service';
 import { blogPosts } from '../database/schema';
 import { CreatePostDto } from './dto/create-post.dto';
 
 @Injectable()
 export class BlogService {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(
+    @Inject(PUB_SUB) private readonly pubSub: PubSub,
+    private readonly databaseService: DatabaseService,
+  ) {}
 
   async createPost(createPostDto: CreatePostDto, authorId: number) {
     const db = this.databaseService.getDb();
@@ -19,7 +24,7 @@ export class BlogService {
         authorId,
       })
       .returning();
-
+    await this.pubSub.publish('NEW_POST', { newPost: newPost });
     return newPost;
   }
 
