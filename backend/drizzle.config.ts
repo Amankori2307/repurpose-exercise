@@ -1,3 +1,4 @@
+import { appConfig } from 'config';
 import type { Config } from 'drizzle-kit';
 
 export default {
@@ -5,6 +6,6 @@ export default {
   out: './drizzle',
   dialect: 'sqlite',
   dbCredentials: {
-    url: process.env.DB_DATABASE || './database.sqlite',
+    url: appConfig.DB_URL,
   },
 } satisfies Config;
