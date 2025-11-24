@@ -49,6 +49,10 @@
     "rxjs": "^7.8.1",
     "sqlite3": "^5.1.7"
   },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.15.4"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
