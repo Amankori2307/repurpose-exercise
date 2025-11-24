@@ -124,7 +124,7 @@ Password: password
 ## Features
 
 - User authentication and authorization
-- Create, read, update, and delete blog posts
+- Create and read blog posts
 - Real-time GraphQL subscriptions
 - Responsive UI with Tailwind CSS
 - Type-safe development with TypeScript
