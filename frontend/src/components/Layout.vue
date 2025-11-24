@@ -7,8 +7,8 @@
       @toggle-sidebar="toggleSidebar" 
     />
     
-    <!-- Mobile header with hamburger -->
-    <div v-if="isLoggedIn" class="md:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+    <!-- Mobile/Tablet header with hamburger -->
+    <div v-if="isLoggedIn" class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
       <h1 class="text-lg font-light text-gray-900">Blog</h1>
       <button 
         @click="toggleSidebar"
@@ -22,7 +22,10 @@
     
     <!-- Main content -->
     <div class="transition-all duration-300"
-         :class="{ 'md:ml-64': isLoggedIn, 'ml-0': !isLoggedIn }">
+         :class="{ 
+           'lg:ml-64': isLoggedIn,
+           'pt-16 lg:pt-0': isLoggedIn
+         }">
       <slot />
     </div>
   </div>

@@ -1,6 +1,9 @@
 <template>
   <div class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 z-40 transform transition-transform duration-300 ease-in-out"
-       :class="{ '-translate-x-full md:translate-x-0': !sidebarOpen, 'translate-x-0': sidebarOpen }">
+       :class="{ 
+         '-translate-x-full lg:translate-x-0': !sidebarOpen, 
+         'translate-x-0': sidebarOpen 
+       }">
     
     <!-- Header -->
     <div class="p-6 border-b border-gray-200">
@@ -69,10 +72,10 @@
     </div>
   </div>
 
-  <!-- Overlay for mobile -->
+  <!-- Very transparent overlay for mobile and tablet -->
   <div 
     v-if="sidebarOpen" 
-    class="fixed inset-0 bg-black bg-opacity-30 z-30 md:hidden"
+    class="fixed inset-0 z-30 lg:hidden overlay-transparent"
     @click="toggleSidebar"
   ></div>
 </template>
@@ -104,3 +107,9 @@ const toggleSidebar = () => {
   emit('toggleSidebar')
 }
 </script>
+
+<style scoped>
+.overlay-transparent {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+</style>
