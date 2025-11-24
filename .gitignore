@@ -2,3 +2,7 @@ CONTEXT.md
 node_modules
 .claude
 sample.md
+
+# Improvement documentation files
+IMPROVEMENTS.md
+FRONTEND_IMPROVEMENTS.md
